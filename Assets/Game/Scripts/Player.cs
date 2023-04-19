@@ -2,24 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     [SerializeField]private Rigidbody2D rb;
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private float speed=200;
-    [SerializeField]private Animator animator;
     [SerializeField] private float JumpForce = 350;
+    [SerializeField] private Kunai kunaiPrefab;
+    [SerializeField] private Transform kunaiPoint;
     private bool isGrounded=true,  isAttack=false;
     private bool isJumping=false;
     private float horizontal,vertical;
-    private string currentAnim;
-    private bool isDead=false;
+    //private bool isDead=false;
     private Vector3 savePoint;
     // Start is called before the first frame update
     void Start()
     {
         SavePoint(); 
-        OnInit();
+        
     }
 
     // Update is called once per frame
@@ -94,12 +94,21 @@ public class Player : MonoBehaviour
         }
 
     }
-    public void OnInit()
+    public override void OnInit()
     {
-        isDead=false;
+        base.OnInit();
+        //isDead=false;
         isAttack=false;
         transform.position = savePoint;
         ChangeAnim("idle");
+    }
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+    }
+    protected override void OnDeath()
+    {
+        base.OnDeath();
     }
     private bool CheckGrounded()
     {
@@ -120,6 +129,7 @@ public class Player : MonoBehaviour
         ChangeAnim("throw");
         isAttack = true;
         Invoke(nameof(ResetAttack), 0.5f);
+        Instantiate(kunaiPrefab, kunaiPoint.position, kunaiPoint.rotation);
 
     }
     private void ResetAttack()
@@ -135,15 +145,6 @@ public class Player : MonoBehaviour
         ChangeAnim("jump");
         rb.AddForce(JumpForce * Vector2.up);
     }
-    private void ChangeAnim(string animName)
-    {
-        if(currentAnim != animName)
-        { 
-            animator.ResetTrigger(animName);
-            currentAnim = animName;
-            animator.SetTrigger(currentAnim);
-        }
-    }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -153,7 +154,7 @@ public class Player : MonoBehaviour
         }
         if (collision.tag == "DeathZOne")
         {
-            isDead=true; 
+            //isDead=true; 
             ChangeAnim("die");
             Invoke(nameof(OnInit), 1f);
         }
