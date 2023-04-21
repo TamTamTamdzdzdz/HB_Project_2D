@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6158553616967421031}
   - component: {fileID: 8553440641639659441}
   - component: {fileID: 7337310861913345267}
+  - component: {fileID: 684286826034748954}
   m_Layer: 0
   m_Name: Kunai
   m_TagString: Untagged
@@ -81,6 +82,20 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &684286826034748954
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 944851872842876491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4233fb938cfe58419ad17146015564e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rb: {fileID: 7337310861913345267}
+  hitVFX: {fileID: 1104236778706221169, guid: df4f6133aa120194cad506530f1ebaab, type: 3}
 --- !u!1 &4848249395583007044
 GameObject:
   m_ObjectHideFlags: 0

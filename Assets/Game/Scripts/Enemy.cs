@@ -8,6 +8,7 @@ public class Enemy : Character
     [SerializeField] private float attackRange;
     [SerializeField] private float moveSpeed;
     [SerializeField] private Rigidbody2D rb;
+    [SerializeField] private GameObject attackArea;
     private IState currentState;
     private bool isRight=true;
     private Character target;
@@ -15,7 +16,7 @@ public class Enemy : Character
     // Start is called before the first frame update
     private void Update()
     {
-        if (currentState != null)
+        if (currentState != null&&!isDead)
         {
             currentState.OnExecute(this);
         }
@@ -24,13 +25,18 @@ public class Enemy : Character
     {
         base.OnInit();
         ChangeState(new IdleState());
+        DeActiveAttack();
+        
     }
     public override void OnDespawn()
     {
         base.OnDespawn();
+        Destroy(healthBar.gameObject);
+        Destroy(gameObject);
     }
     protected override void OnDeath()
     {
+        ChangeState(null);
         base.OnDeath();
     }
    
@@ -57,6 +63,8 @@ public class Enemy : Character
     public void Attack()
     {
         ChangeAnim("attack");
+        ActiveAttack();
+        Invoke(nameof(DeActiveAttack), 0.5f);
     }
    
     private void OnTriggerEnter2D(Collider2D collision)
@@ -91,5 +99,14 @@ public class Enemy : Character
     public bool IsTargetInRange()
     {
         return target!=null&&Vector2.Distance(target.transform.position, transform.position) <= attackRange;
+    }
+    private void ActiveAttack()
+    {
+        attackArea.SetActive(true);
+    }
+
+    private void DeActiveAttack()
+    {
+        attackArea.SetActive(false);
     }
 }
